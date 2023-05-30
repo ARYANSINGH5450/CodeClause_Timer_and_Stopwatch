@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch and Countdown Timer</title>
+  <style>
+    .container {
+      text-align: center;
+      padding-top: 50px;
+    }
+    
+    .input-container input {
+      width: 50px;
+      text-align: center;
+      margin: 5px;
+    }
+    
+    .btn {
+      margin-top: 20px;
+    }
+    
+    #timer {
+      font-size: 48px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stopwatch and Countdown Timer</h1>
+    <h2>Countdown Timer</h2>
+    <div class="input-container">
+      <input type="number" id="days" placeholder="Days">
+      <input type="number" id="hours" placeholder="Hours">
+      <input type="number" id="minutes" placeholder="Minutes">
+      <input type="number" id="seconds" placeholder="Seconds">
+    </div>
+    <button class="btn" onclick="startCountdown()">Start Countdown</button>
+    <h2>Stopwatch</h2>
+    <div id="timer">00:00:00</div>
+    <button class="btn" onclick="startStopwatch()">Start Stopwatch</button>
+  </div>
+
+  <script>
+    let countdownInterval;
+    let stopwatchInterval;
+    let countdownTime;
+    let stopwatchTime = 0;
+
+    function startCountdown() {
+      const days = parseInt(document.getElementById('days').value) || 0;
+      const hours = parseInt(document.getElementById('hours').value) || 0;
+      const minutes = parseInt(document.getElementById('minutes').value) || 0;
+      const seconds = parseInt(document.getElementById('seconds').value) || 0;
+
+      countdownTime = days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60 + seconds;
+
+      if (countdownTime > 0) {
+        clearInterval(stopwatchInterval);
+        clearInterval(countdownInterval);
+        countdownInterval = setInterval(updateCountdown, 1000);
+      }
+    }
+
+    function updateCountdown() {
+      const countdownDisplay = document.getElementById('timer');
+
+      if (countdownTime <= 0) {
+        clearInterval(countdownInterval);
+        countdownDisplay.innerHTML = "Countdown finished!";
+        return;
+      }
+
+      const days = Math.floor(countdownTime / (24 * 60 * 60));
+      const hours = Math.floor((countdownTime % (24 * 60 * 60)) / (60 * 60));
+      const minutes = Math.floor((countdownTime % (60 * 60)) / 60);
+      const seconds = Math.floor(countdownTime % 60);
+
+      countdownDisplay.innerHTML = `${formatTime(days)}:${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+      countdownTime--;
+    }
+
+    function startStopwatch() {
+      clearInterval(countdownInterval);
+      clearInterval(stopwatchInterval);
+      stopwatchInterval = setInterval(updateStopwatch, 1000);
+    }
+
+    function updateStopwatch() {
+      const stopwatchDisplay = document.getElementById('timer');
+      stopwatchTime++;
+
+      const hours = Math.floor(stopwatchTime / (60 * 60));
+      const minutes = Math.floor((stopwatchTime % (60 * 60)) / 60);
+      const seconds = Math.floor(stopwatchTime % 60);
+
+      stopwatchDisplay.innerHTML = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+
+    function formatTime(time) {
+      return time.toString().padStart(2, '0');
+    }
+  </script>
+</body>
+</html>
