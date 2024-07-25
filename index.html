@@ -38,6 +38,7 @@
     <h2>Stopwatch</h2>
     <div id="timer">00:00:00</div>
     <button class="btn" onclick="startStopwatch()">Start Stopwatch</button>
+    <input type="reset" onclick="restozero()">
   </div>
 
   <script>
@@ -95,7 +96,12 @@
 
       stopwatchDisplay.innerHTML = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
     }
-
+    function restozero(){
+    const stopwatchDisplay = document.getElementById('timer');
+    clearInterval(countdownInterval);
+    clearInterval(stopwatchInterval);
+    stopwatchDisplay.innerHTML="00:00:00";
+    }
     function formatTime(time) {
       return time.toString().padStart(2, '0');
     }
